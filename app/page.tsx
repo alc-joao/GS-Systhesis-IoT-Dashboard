@@ -63,10 +63,10 @@ export default function HomePage() {
   const [horaAtual, setHoraAtual] = useState("");
 
   const [dados, setDados] = useState<BioEstufaData>({
-    temperatura: 24.5,
-    umidadeAr: 62,
-    umidadeSolo: 78,
-    luminosidade: 68,
+    temperatura: 24,
+    umidadeAr: 40,
+    umidadeSolo: 80,
+    luminosidade: 60,
     irrigacaoAtiva: false,
     luzArtificialAtiva: false,
     alertaCritico: false,
@@ -75,12 +75,7 @@ export default function HomePage() {
   });
 
   const [historico, setHistorico] = useState<Historico[]>([
-    { horario: "12:00", temperatura: 23, umidadeSolo: 80, luminosidade: 62 },
-    { horario: "12:01", temperatura: 24, umidadeSolo: 76, luminosidade: 58 },
-    { horario: "12:02", temperatura: 25, umidadeSolo: 70, luminosidade: 55 },
-    { horario: "12:03", temperatura: 26, umidadeSolo: 60, luminosidade: 48 },
-    { horario: "12:04", temperatura: 24, umidadeSolo: 52, luminosidade: 44 },
-    { horario: "12:05", temperatura: 23, umidadeSolo: 45, luminosidade: 38 },
+    { horario: "12:00", temperatura: 24, umidadeSolo: 80, luminosidade: 60 },
   ]);
 
   function irParaSecao(id: string) {
@@ -92,59 +87,47 @@ export default function HomePage() {
   }
 
   useEffect(() => {
+    async function carregarDadosIoT() {
+      try {
+        const resposta = await fetch("/api/iot", {
+          cache: "no-store",
+        });
+
+        if (!resposta.ok) {
+          throw new Error("Erro ao carregar dados da API IoT");
+        }
+
+        const dadosApi: BioEstufaData = await resposta.json();
+
+        const agora = new Date();
+        const horario = agora.toLocaleTimeString("pt-BR", {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+        });
+
+        setHoraAtual(horario);
+        setDados(dadosApi);
+
+        setHistorico((old) => [
+          ...old.slice(-7),
+          {
+            horario,
+            temperatura: dadosApi.temperatura,
+            umidadeSolo: dadosApi.umidadeSolo,
+            luminosidade: dadosApi.luminosidade,
+          },
+        ]);
+      } catch (error) {
+        console.error("Erro ao buscar dados da BioEstufa:", error);
+      }
+    }
+
+    carregarDadosIoT();
+
     const interval = setInterval(() => {
-      const temperatura = Number((18 + Math.random() * 17).toFixed(1));
-      const umidadeSolo = Math.floor(18 + Math.random() * 82);
-      const luminosidade = Math.floor(18 + Math.random() * 82);
-      const umidadeAr = Number((35 + Math.random() * 55).toFixed(1));
-
-      const irrigacaoAtiva = umidadeSolo < 30;
-      const luzArtificialAtiva = luminosidade < 35;
-      const alertaCritico =
-        temperatura > 35 || umidadeSolo < 18 || umidadeAr < 25;
-      const servoVentilacao = temperatura > 30 ? 90 : 0;
-
-      const status = alertaCritico
-        ? "CRÍTICO"
-        : irrigacaoAtiva
-        ? "IRRIGAÇÃO ATIVA"
-        : luzArtificialAtiva
-        ? "LUZ ARTIFICIAL"
-        : servoVentilacao > 0
-        ? "VENTILAÇÃO ATIVA"
-        : "NORMAL";
-
-      const agora = new Date();
-      const horario = agora.toLocaleTimeString("pt-BR", {
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-      });
-
-      setHoraAtual(horario);
-
-      setDados({
-        temperatura,
-        umidadeAr,
-        umidadeSolo,
-        luminosidade,
-        irrigacaoAtiva,
-        luzArtificialAtiva,
-        alertaCritico,
-        servoVentilacao,
-        status,
-      });
-
-      setHistorico((old) => [
-        ...old.slice(-7),
-        {
-          horario,
-          temperatura,
-          umidadeSolo,
-          luminosidade,
-        },
-      ]);
-    }, 2600);
+      carregarDadosIoT();
+    }, 3000);
 
     return () => clearInterval(interval);
   }, []);
@@ -275,7 +258,7 @@ export default function HomePage() {
               <div>
                 <h2 className="text-3xl font-black">Monitoramento Ambiental</h2>
                 <p className="mt-2 text-slate-400">
-                  Leituras simuladas em tempo real a partir dos sensores do ESP32.
+                  Leituras recebidas em tempo real a partir da API IoT da BioEstufa.
                 </p>
               </div>
 
