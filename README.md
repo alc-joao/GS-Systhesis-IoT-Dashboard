@@ -1,36 +1,209 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚀 Systhesis BioEstufa Espacial Dashboard
 
-## Getting Started
+## 👨‍💻 Integrantes
 
-First, run the development server:
+- João Victor Alcântara — RM562707
+- Phillipo Barbosa — RM565399
+- Eduardo Martins — RM562259
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+# 📌 Descrição do Projeto
+
+O Systhesis BioEstufa Espacial Dashboard é uma plataforma web desenvolvida para monitoramento inteligente de uma bioestufa automatizada voltada para produção de alimentos em ambientes extremos.
+
+O sistema simula o acompanhamento em tempo real das condições ambientais necessárias para o cultivo em colônias espaciais, utilizando dados provenientes de sensores conectados a um ESP32.
+
+---
+
+# 🌎 Problema
+
+A colonização da Lua, Marte e outros ambientes extremos exige sistemas capazes de produzir alimentos de forma controlada.
+
+Nesses ambientes, fatores como temperatura, umidade, luminosidade e irrigação precisam ser constantemente monitorados para garantir a sobrevivência das plantações.
+
+O monitoramento manual torna-se inviável, exigindo soluções inteligentes e automatizadas.
+
+---
+
+# ✅ Solução Proposta
+
+Desenvolvemos uma plataforma IoT capaz de:
+
+- Monitorar temperatura
+- Monitorar umidade do ar
+- Monitorar umidade do solo
+- Monitorar luminosidade
+- Controlar irrigação automática
+- Controlar ventilação
+- Controlar iluminação artificial
+- Exibir alertas críticos
+- Disponibilizar informações através de API REST
+
+---
+
+# 🛠️ Tecnologias Utilizadas
+
+## Front-end
+
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS
+
+---
+
+## Deploy
+
+- Vercel
+
+---
+
+## Integração
+
+- API REST
+- ESP32
+- Wokwi
+
+---
+
+# 📊 Funcionalidades
+
+## Dashboard
+
+- Monitoramento em tempo real
+- Interface inspirada em centros de controle espacial
+- Indicadores de saúde do sistema
+- Status operacional
+
+---
+
+## Sensores
+
+- Temperatura
+- Umidade do Ar
+- Umidade do Solo
+- Luminosidade
+
+---
+
+## Automação
+
+- Irrigação automática
+- Ventilação inteligente
+- Luz artificial
+
+---
+
+## Alertas
+
+- Temperatura crítica
+- Solo seco
+- Falha operacional
+
+---
+
+# 🔌 API REST
+
+Endpoints disponíveis:
+
+```http
+/api/sensores
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+```http
+/api/status
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```http
+/api/atuadores
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```http
+/api/geral
+```
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+# 📈 Estrutura do Sistema
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```txt
+ESP32 + Sensores
+        ↓
+     API REST
+        ↓
+ Dashboard Web
+        ↓
+Monitoramento
+ e Automação
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+# 🌐 Deploy
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Dashboard Online:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+https://gs-systhesis-io-t-dashboard.vercel.app/
+
+---
+
+# 📷 Evidências
+
+## Dashboard Principal
+
+Adicionar captura do dashboard.
+
+---
+
+## Sensores
+
+Adicionar captura do monitoramento.
+
+---
+
+## API REST
+
+Adicionar captura dos endpoints.
+
+---
+
+# 🔗 Repositórios
+
+## Dashboard
+
+https://github.com/alc-joao/GS-Systhesis-IoT-Dashboard
+
+---
+
+## IoT
+
+https://github.com/alc-joao/GS-Systhesis-IoT-BioEstufa
+
+---
+
+# 🎥 Vídeo Pitch
+
+Adicionar link do vídeo após publicação.
+
+---
+
+# 📦 Entrega Final
+
+O projeto contém:
+
+- Dashboard Web
+- ESP32
+- Sensores
+- API REST
+- Automação
+- Simulação Wokwi
+- Deploy Vercel
+- Documentação
+- Evidências
+
+---
+
+# 🚀 Systhesis BioEstufa Espacial
+
+Projeto acadêmico desenvolvido para a Global Solution FIAP.
