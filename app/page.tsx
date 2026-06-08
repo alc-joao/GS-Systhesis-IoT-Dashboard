@@ -107,12 +107,12 @@ export default function HomePage() {
       const status = alertaCritico
         ? "CRÍTICO"
         : irrigacaoAtiva
-          ? "IRRIGAÇÃO ATIVA"
-          : luzArtificialAtiva
-            ? "LUZ ARTIFICIAL"
-            : servoVentilacao > 0
-              ? "VENTILAÇÃO ATIVA"
-              : "NORMAL";
+        ? "IRRIGAÇÃO ATIVA"
+        : luzArtificialAtiva
+        ? "LUZ ARTIFICIAL"
+        : servoVentilacao > 0
+        ? "VENTILAÇÃO ATIVA"
+        : "NORMAL";
 
       const agora = new Date();
       const horario = agora.toLocaleTimeString("pt-BR", {
@@ -157,24 +157,22 @@ export default function HomePage() {
       <div className="pointer-events-none fixed inset-0 opacity-30 [background-image:radial-gradient(#ffffff_1px,transparent_1px)] [background-size:34px_34px]" />
 
       <div className="relative flex min-h-screen">
-        <aside className="hidden w-72 border-r border-cyan-400/10 bg-slate-950/80 p-6 backdrop-blur-xl lg:block">
+        <aside className="fixed left-0 top-0 z-50 hidden h-screen w-72 overflow-y-auto border-r border-cyan-400/10 bg-slate-950/95 p-6 backdrop-blur-xl lg:block">
           <div className="text-center">
             <Image
               src="/logo.png"
               alt="Systhesis"
-              width={120}
-              height={120}
+              width={200}
+              height={200}
               priority
-              className="mx-auto object-contain drop-shadow-[0_0_35px_rgba(34,211,238,0.75)]"
+              className="mx-auto object-contain drop-shadow-[0_0_45px_rgba(34,211,238,0.85)]"
             />
-
-            <h2 className="mt-3 text-3xl font-black">Systhesis</h2>
             <p className="text-xs uppercase tracking-[0.35em] text-cyan-300">
               BioEstufa IoT
             </p>
           </div>
 
-          <nav className="mt-10 space-y-2">
+          <nav className="mt-8 space-y-2">
             {menuItems.map((item) => {
               const Icon = item.icon;
 
@@ -195,7 +193,7 @@ export default function HomePage() {
             })}
           </nav>
 
-          <div className="mt-10 rounded-3xl border border-cyan-400/10 bg-slate-900/70 p-5">
+          <div className="mt-8 rounded-3xl border border-cyan-400/10 bg-slate-900/70 p-5">
             <p className="text-sm text-slate-400">Conexão ESP32</p>
             <div className="mt-3 flex items-center gap-2 text-emerald-400">
               <span className="h-2.5 w-2.5 rounded-full bg-emerald-400 shadow-[0_0_18px_rgba(52,211,153,0.9)]" />
@@ -207,7 +205,7 @@ export default function HomePage() {
           </div>
         </aside>
 
-        <section className="flex-1 px-6 py-6 lg:px-8">
+        <section className="flex-1 px-6 py-6 lg:ml-72 lg:px-8">
           <div className="mb-6 flex flex-col justify-between gap-4 rounded-3xl border border-cyan-400/10 bg-slate-950/70 p-5 backdrop-blur-xl md:flex-row md:items-center">
             <div>
               <p className="text-xs uppercase tracking-[0.35em] text-cyan-300">
@@ -221,7 +219,11 @@ export default function HomePage() {
             <div className="flex flex-wrap gap-3">
               <TopBadge icon={Wifi} label="ESP32" value="Online" />
               <TopBadge icon={Radio} label="API REST" value="Ativa" />
-              <TopBadge icon={Clock} label="Última leitura" value={horaAtual || "--:--"} />
+              <TopBadge
+                icon={Clock}
+                label="Última leitura"
+                value={horaAtual || "--:--"}
+              />
             </div>
           </div>
 
@@ -253,8 +255,8 @@ export default function HomePage() {
                     dados.alertaCritico
                       ? "text-red-400"
                       : dados.status === "NORMAL"
-                        ? "text-emerald-400"
-                        : "text-cyan-300"
+                      ? "text-emerald-400"
+                      : "text-cyan-300"
                   }`}
                 >
                   {dados.status}
@@ -288,7 +290,10 @@ export default function HomePage() {
                 title="Temperatura"
                 value={`${dados.temperatura}°C`}
                 subtitle="Sensor DHT22"
-                percent={Math.min(100, Math.round((dados.temperatura / 40) * 100))}
+                percent={Math.min(
+                  100,
+                  Math.round((dados.temperatura / 40) * 100)
+                )}
                 color="bg-red-400"
                 valueColor="text-red-300"
               />
@@ -501,7 +506,8 @@ export default function HomePage() {
                   API REST Documentada
                 </h2>
                 <p className="mt-2 text-slate-400">
-                  Endpoints JSON utilizados para consulta dos sensores, status e atuadores.
+                  Endpoints JSON utilizados para consulta dos sensores, status e
+                  atuadores.
                 </p>
               </div>
 
@@ -647,8 +653,8 @@ function AlertCard({
         danger
           ? "border-red-400/25 bg-red-500/10"
           : success
-            ? "border-emerald-400/25 bg-emerald-500/10"
-            : "border-yellow-400/25 bg-yellow-500/10"
+          ? "border-emerald-400/25 bg-emerald-500/10"
+          : "border-yellow-400/25 bg-yellow-500/10"
       }`}
     >
       <p
@@ -656,8 +662,8 @@ function AlertCard({
           danger
             ? "text-red-300"
             : success
-              ? "text-emerald-300"
-              : "text-yellow-300"
+            ? "text-emerald-300"
+            : "text-yellow-300"
         }`}
       >
         {title}
