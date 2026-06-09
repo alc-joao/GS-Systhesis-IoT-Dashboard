@@ -2,43 +2,71 @@
 
 ## 👨‍💻 Integrantes
 
-- João Victor Alcântara — RM562707
-- Phillipo Barbosa — RM565399
-- Eduardo Martins — RM562259
+* João Victor Alcântara — RM562707
+* Phillipo Barbosa — RM565399
+* Eduardo Martins — RM562259
 
 ---
 
 # 📌 Descrição do Projeto
 
-O Systhesis BioEstufa Espacial Dashboard é uma plataforma web desenvolvida para monitoramento inteligente de uma bioestufa automatizada voltada para produção de alimentos em ambientes extremos.
+O Systhesis BioEstufa Espacial Dashboard é uma plataforma web desenvolvida para monitoramento inteligente de uma bioestufa automatizada voltada para a produção de alimentos em ambientes extremos.
 
-O sistema simula o acompanhamento em tempo real das condições ambientais necessárias para o cultivo em colônias espaciais, utilizando dados provenientes de sensores conectados a um ESP32.
+O sistema recebe dados em tempo real provenientes de sensores conectados a um ESP32, permitindo acompanhar as condições ambientais da estufa e visualizar o funcionamento dos mecanismos de automação.
 
 ---
 
 # 🌎 Problema
 
-A colonização da Lua, Marte e outros ambientes extremos exige sistemas capazes de produzir alimentos de forma controlada.
+A produção de alimentos em colônias espaciais representa um dos maiores desafios para futuras missões de longa duração.
 
-Nesses ambientes, fatores como temperatura, umidade, luminosidade e irrigação precisam ser constantemente monitorados para garantir a sobrevivência das plantações.
+Ambientes como a Lua e Marte exigem monitoramento constante de fatores ambientais críticos, como temperatura, umidade, luminosidade e irrigação.
 
-O monitoramento manual torna-se inviável, exigindo soluções inteligentes e automatizadas.
+O acompanhamento manual dessas variáveis torna-se inviável, exigindo sistemas inteligentes capazes de monitorar e automatizar processos essenciais para o cultivo.
 
 ---
 
 # ✅ Solução Proposta
 
-Desenvolvemos uma plataforma IoT capaz de:
+Foi desenvolvida uma plataforma IoT integrada capaz de:
 
-- Monitorar temperatura
-- Monitorar umidade do ar
-- Monitorar umidade do solo
-- Monitorar luminosidade
-- Controlar irrigação automática
-- Controlar ventilação
-- Controlar iluminação artificial
-- Exibir alertas críticos
-- Disponibilizar informações através de API REST
+* Monitorar temperatura
+* Monitorar umidade do ar
+* Monitorar umidade do solo
+* Monitorar luminosidade
+* Controlar irrigação automática
+* Controlar ventilação
+* Controlar iluminação artificial
+* Exibir alertas críticos
+* Disponibilizar dados através de API REST
+* Exibir informações em tempo real através de um Dashboard Web
+
+---
+
+# 🏗️ Arquitetura da Solução
+
+```text
+Sensores
+   ↓
+ESP32
+   ↓
+Wi-Fi
+   ↓
+API REST Next.js
+   ↓
+Dashboard Web
+```
+
+---
+
+# 🔄 Fluxo de Dados
+
+1. Os sensores coletam dados ambientais.
+2. O ESP32 processa as informações recebidas.
+3. Os dados são enviados via Wi-Fi para a API REST.
+4. A API atualiza os dados da BioEstufa.
+5. O Dashboard consulta os endpoints JSON.
+6. As informações são exibidas em tempo real para o usuário.
 
 ---
 
@@ -46,24 +74,27 @@ Desenvolvemos uma plataforma IoT capaz de:
 
 ## Front-end
 
-- Next.js
-- React
-- TypeScript
-- Tailwind CSS
+* Next.js
+* React
+* TypeScript
+* Tailwind CSS
+* Recharts
+* Lucide React
 
 ---
 
 ## Deploy
 
-- Vercel
+* Vercel
 
 ---
 
 ## Integração
 
-- API REST
-- ESP32
-- Wokwi
+* API REST
+* ESP32
+* Wokwi
+* Wi-Fi
 
 ---
 
@@ -71,78 +102,123 @@ Desenvolvemos uma plataforma IoT capaz de:
 
 ## Dashboard
 
-- Monitoramento em tempo real
-- Interface inspirada em centros de controle espacial
-- Indicadores de saúde do sistema
-- Status operacional
+* Monitoramento em tempo real
+* Interface inspirada em centros de controle espacial
+* Indicadores de saúde do sistema
+* Status operacional da BioEstufa
 
 ---
 
 ## Sensores
 
-- Temperatura
-- Umidade do Ar
-- Umidade do Solo
-- Luminosidade
+* Temperatura
+* Umidade do Ar
+* Umidade do Solo
+* Luminosidade
 
 ---
 
 ## Automação
 
-- Irrigação automática
-- Ventilação inteligente
-- Luz artificial
+* Irrigação automática
+* Ventilação inteligente
+* Luz artificial automática
 
 ---
 
 ## Alertas
 
-- Temperatura crítica
-- Solo seco
-- Falha operacional
+* Temperatura crítica
+* Solo seco
+* Baixa luminosidade
+* Condições críticas de operação
 
 ---
 
 # 🔌 API REST
 
-Endpoints disponíveis:
+A API REST recebe os dados enviados pelo ESP32 e disponibiliza informações para consulta pelo Dashboard.
 
-```http
-/api/sensores
-```
+## POST /api/iot
 
-```http
-/api/status
-```
+Recebe os dados enviados pelo ESP32.
 
-```http
-/api/atuadores
-```
+---
 
-```http
-/api/geral
+## GET /api/iot
+
+Retorna todos os dados da BioEstufa.
+
+---
+
+## GET /api/sensores
+
+Retorna:
+
+* temperatura
+* umidadeAr
+* umidadeSolo
+* luminosidade
+
+---
+
+## GET /api/status
+
+Retorna:
+
+* status
+* alertaCritico
+
+---
+
+## GET /api/atuadores
+
+Retorna:
+
+* irrigacaoAtiva
+* luzArtificialAtiva
+* alertaCritico
+* servoVentilacao
+
+---
+
+# 📄 Exemplo de Resposta
+
+```json
+{
+  "temperatura": 28.5,
+  "umidadeAr": 45,
+  "umidadeSolo": 62,
+  "luminosidade": 40,
+  "irrigacaoAtiva": true,
+  "luzArtificialAtiva": false,
+  "alertaCritico": false,
+  "servoVentilacao": 90,
+  "status": "NORMAL"
+}
 ```
 
 ---
 
 # 📈 Estrutura do Sistema
 
-```txt
+```text
 ESP32 + Sensores
         ↓
-     API REST
+      Wi-Fi
+        ↓
+ API REST Next.js
         ↓
  Dashboard Web
         ↓
-Monitoramento
- e Automação
+Monitoramento e Automação
 ```
 
 ---
 
 # 🌐 Deploy
 
-Dashboard Online:
+### Dashboard Online
 
 https://gs-systhesis-io-t-dashboard.vercel.app/
 
@@ -152,19 +228,34 @@ https://gs-systhesis-io-t-dashboard.vercel.app/
 
 ## Dashboard Principal
 
-Adicionar captura do dashboard.
+![alt text](image.png)
 
 ---
 
-## Sensores
+## Monitoramento dos Sensores
 
-Adicionar captura do monitoramento.
+![alt text](image-1.png)
+
+---
+
+## Automação
+
+![alt text](image-2.png)
 
 ---
 
 ## API REST
 
-Adicionar captura dos endpoints.
+Adicionar capturas dos endpoints:
+
+* /api/iot
+![alt text](image-3.png)
+* /api/sensores
+![alt text](image-4.png)
+* /api/status
+![alt text](image-5.png)
+* /api/atuadores
+![alt text](image-6.png)
 
 ---
 
@@ -192,15 +283,16 @@ Adicionar link do vídeo após publicação.
 
 O projeto contém:
 
-- Dashboard Web
-- ESP32
-- Sensores
-- API REST
-- Automação
-- Simulação Wokwi
-- Deploy Vercel
-- Documentação
-- Evidências
+* Dashboard Web
+* ESP32
+* Sensores
+* Atuadores
+* API REST
+* Automação Inteligente
+* Simulação Wokwi
+* Deploy Vercel
+* Integração em Tempo Real
+* Documentação Técnica
 
 ---
 
