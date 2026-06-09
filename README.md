@@ -275,7 +275,7 @@ https://github.com/alc-joao/GS-Systhesis-IoT-BioEstufa
 
 # 🎥 Vídeo Pitch
 
-Adicionar link do vídeo após publicação.
+https://www.youtube.com/watch?v=SXyj7NUR-nc
 
 ---
 
