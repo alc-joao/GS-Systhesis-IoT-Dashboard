@@ -127,7 +127,7 @@ export default function HomePage() {
 
     const interval = setInterval(() => {
       carregarDadosIoT();
-    }, 3000);
+    }, 1000);
 
     return () => clearInterval(interval);
   }, []);
