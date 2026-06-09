@@ -125,9 +125,7 @@ export default function HomePage() {
 
     carregarDadosIoT();
 
-    const interval = setInterval(() => {
-      carregarDadosIoT();
-    }, 1000);
+    const interval = setInterval(carregarDadosIoT, 1000);
 
     return () => clearInterval(interval);
   }, []);
@@ -183,7 +181,7 @@ export default function HomePage() {
               Online
             </div>
             <p className="mt-4 text-xs leading-5 text-slate-500">
-              WebServer ativo, Wi-Fi conectado e endpoints JSON documentados.
+              ESP32 conectado via Wi-Fi, enviando dados para a API REST do dashboard.
             </p>
           </div>
         </aside>
@@ -268,48 +266,10 @@ export default function HomePage() {
             </div>
 
             <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-              <MetricCard
-                icon={Thermometer}
-                title="Temperatura"
-                value={`${dados.temperatura}°C`}
-                subtitle="Sensor DHT22"
-                percent={Math.min(
-                  100,
-                  Math.round((dados.temperatura / 40) * 100)
-                )}
-                color="bg-red-400"
-                valueColor="text-red-300"
-              />
-
-              <MetricCard
-                icon={Droplets}
-                title="Umidade do Ar"
-                value={`${dados.umidadeAr}%`}
-                subtitle="Condição atmosférica"
-                percent={Math.round(dados.umidadeAr)}
-                color="bg-blue-400"
-                valueColor="text-blue-300"
-              />
-
-              <MetricCard
-                icon={Sprout}
-                title="Umidade do Solo"
-                value={`${dados.umidadeSolo}%`}
-                subtitle="Controle de irrigação"
-                percent={dados.umidadeSolo}
-                color="bg-emerald-400"
-                valueColor="text-emerald-300"
-              />
-
-              <MetricCard
-                icon={Lightbulb}
-                title="Luminosidade"
-                value={`${dados.luminosidade}%`}
-                subtitle="Sensor LDR"
-                percent={dados.luminosidade}
-                color="bg-yellow-300"
-                valueColor="text-yellow-300"
-              />
+              <MetricCard icon={Thermometer} title="Temperatura" value={`${dados.temperatura}°C`} subtitle="Sensor DHT22" percent={Math.min(100, Math.max(0, Math.round((dados.temperatura / 40) * 100)))} color="bg-red-400" valueColor="text-red-300" />
+              <MetricCard icon={Droplets} title="Umidade do Ar" value={`${dados.umidadeAr}%`} subtitle="Condição atmosférica" percent={Math.min(100, Math.max(0, Math.round(dados.umidadeAr)))} color="bg-blue-400" valueColor="text-blue-300" />
+              <MetricCard icon={Sprout} title="Umidade do Solo" value={`${dados.umidadeSolo}%`} subtitle="Controle de irrigação" percent={Math.min(100, Math.max(0, dados.umidadeSolo))} color="bg-emerald-400" valueColor="text-emerald-300" />
+              <MetricCard icon={Lightbulb} title="Luminosidade" value={`${dados.luminosidade}%`} subtitle="Sensor LDR" percent={Math.min(100, Math.max(0, dados.luminosidade))} color="bg-yellow-300" valueColor="text-yellow-300" />
             </div>
           </section>
 
@@ -351,84 +311,26 @@ export default function HomePage() {
                       }}
                     />
 
-                    <Area
-                      type="monotone"
-                      dataKey="temperatura"
-                      name="Temperatura"
-                      stroke="#22d3ee"
-                      fill="url(#temp)"
-                      strokeWidth={3}
-                    />
-                    <Area
-                      type="monotone"
-                      dataKey="umidadeSolo"
-                      name="Umidade do Solo"
-                      stroke="#34d399"
-                      fill="transparent"
-                      strokeWidth={3}
-                    />
-                    <Area
-                      type="monotone"
-                      dataKey="luminosidade"
-                      name="Luminosidade"
-                      stroke="#fde047"
-                      fill="transparent"
-                      strokeWidth={3}
-                    />
+                    <Area type="monotone" dataKey="temperatura" name="Temperatura" stroke="#22d3ee" fill="url(#temp)" strokeWidth={3} />
+                    <Area type="monotone" dataKey="umidadeSolo" name="Umidade do Solo" stroke="#34d399" fill="transparent" strokeWidth={3} />
+                    <Area type="monotone" dataKey="luminosidade" name="Luminosidade" stroke="#fde047" fill="transparent" strokeWidth={3} />
                   </AreaChart>
                 </ResponsiveContainer>
               </div>
             </div>
 
-            <div
-              id="alertas"
-              className="scroll-mt-8 rounded-[2rem] border border-cyan-400/10 bg-slate-950/70 p-7 backdrop-blur-xl"
-            >
+            <div id="alertas" className="scroll-mt-8 rounded-[2rem] border border-cyan-400/10 bg-slate-950/70 p-7 backdrop-blur-xl">
               <p className="text-sm uppercase tracking-[0.35em] text-cyan-300">
                 Alertas
               </p>
               <h2 className="mt-2 text-3xl font-black">Eventos do Sistema</h2>
 
               <div className="mt-6 space-y-4">
-                {dados.alertaCritico && (
-                  <AlertCard
-                    danger
-                    title="Condição crítica detectada"
-                    description="Buzzer e LED vermelho acionados automaticamente."
-                  />
-                )}
-
-                {dados.irrigacaoAtiva && (
-                  <AlertCard
-                    title="Solo abaixo do ideal"
-                    description="Irrigação automática ativada para estabilizar o cultivo."
-                  />
-                )}
-
-                {dados.luzArtificialAtiva && (
-                  <AlertCard
-                    title="Baixa luminosidade"
-                    description="Luz artificial ligada para manter a fotossíntese."
-                  />
-                )}
-
-                {dados.servoVentilacao > 0 && (
-                  <AlertCard
-                    title="Ventilação ativada"
-                    description="Servo abriu a saída de ar para reduzir temperatura."
-                  />
-                )}
-
-                {!dados.alertaCritico &&
-                  !dados.irrigacaoAtiva &&
-                  !dados.luzArtificialAtiva &&
-                  dados.servoVentilacao === 0 && (
-                    <AlertCard
-                      success
-                      title="Ambiente estável"
-                      description="Todos os parâmetros estão dentro da faixa segura."
-                    />
-                  )}
+                {dados.alertaCritico && <AlertCard danger title="Condição crítica detectada" description="Buzzer e LED vermelho acionados automaticamente." />}
+                {dados.irrigacaoAtiva && <AlertCard title="Solo abaixo do ideal" description="Irrigação automática ativada para estabilizar o cultivo." />}
+                {dados.luzArtificialAtiva && <AlertCard title="Baixa luminosidade" description="Luz artificial ligada para manter a fotossíntese." />}
+                {dados.servoVentilacao > 0 && <AlertCard title="Ventilação ativada" description="Servo abriu a saída de ar para reduzir temperatura." />}
+                {!dados.alertaCritico && !dados.irrigacaoAtiva && !dados.luzArtificialAtiva && dados.servoVentilacao === 0 && <AlertCard success title="Ambiente estável" description="Todos os parâmetros estão dentro da faixa segura." />}
               </div>
             </div>
           </section>
@@ -437,60 +339,25 @@ export default function HomePage() {
             <h2 className="mb-5 text-3xl font-black">Automação da Estufa</h2>
 
             <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-              <ActionCard
-                icon={Droplets}
-                title="Irrigação"
-                description="Liga abaixo de 30% de umidade do solo."
-                active={dados.irrigacaoAtiva}
-                activeText="Ativa"
-                inactiveText="Em espera"
-              />
-
-              <ActionCard
-                icon={Lightbulb}
-                title="Luz Artificial"
-                description="Liga quando a luminosidade está baixa."
-                active={dados.luzArtificialAtiva}
-                activeText="Ligada"
-                inactiveText="Desligada"
-              />
-
-              <ActionCard
-                icon={Fan}
-                title="Ventilação"
-                description="Servo abre quando a temperatura passa de 30°C."
-                active={dados.servoVentilacao > 0}
-                activeText={`${dados.servoVentilacao}°`}
-                inactiveText="Fechada"
-              />
-
-              <ActionCard
-                icon={AlertTriangle}
-                title="Alerta Crítico"
-                description="Buzzer e LED vermelho para condições de risco."
-                active={dados.alertaCritico}
-                activeText="Acionado"
-                inactiveText="Normal"
-                danger={dados.alertaCritico}
-              />
+              <ActionCard icon={Droplets} title="Irrigação" description="Liga abaixo de 30% de umidade do solo." active={dados.irrigacaoAtiva} activeText="Ativa" inactiveText="Em espera" />
+              <ActionCard icon={Lightbulb} title="Luz Artificial" description="Liga quando a luminosidade está baixa." active={dados.luzArtificialAtiva} activeText="Ligada" inactiveText="Desligada" />
+              <ActionCard icon={Fan} title="Ventilação" description="Servo abre quando a temperatura passa de 30°C." active={dados.servoVentilacao > 0} activeText={`${dados.servoVentilacao}°`} inactiveText="Fechada" />
+              <ActionCard icon={AlertTriangle} title="Alerta Crítico" description="Buzzer e LED vermelho para condições de risco." active={dados.alertaCritico} activeText="Acionado" inactiveText="Normal" danger={dados.alertaCritico} />
             </div>
           </section>
 
-          <section
-            id="api"
-            className="scroll-mt-8 mt-8 rounded-[2rem] border border-cyan-400/10 bg-slate-950/70 p-7 backdrop-blur-xl"
-          >
+          <section id="api" className="scroll-mt-8 mt-8 rounded-[2rem] border border-cyan-400/10 bg-slate-950/70 p-7 backdrop-blur-xl">
             <div className="flex flex-col justify-between gap-5 md:flex-row md:items-center">
               <div>
                 <p className="text-sm uppercase tracking-[0.35em] text-cyan-300">
-                  WebServer ESP32
+                  API REST Next.js
                 </p>
                 <h2 className="mt-2 text-3xl font-black">
-                  API REST Documentada
+                  Endpoints JSON Documentados
                 </h2>
                 <p className="mt-2 text-slate-400">
-                  Endpoints JSON utilizados para consulta dos sensores, status e
-                  atuadores.
+                  Rotas utilizadas para receber dados do ESP32 e consultar sensores,
+                  status e atuadores da BioEstufa.
                 </p>
               </div>
 
@@ -500,37 +367,23 @@ export default function HomePage() {
             </div>
 
             <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+              <Endpoint path="/api/iot" description="Payload completo" />
               <Endpoint path="/api/sensores" description="Leituras ambientais" />
               <Endpoint path="/api/status" description="Estado geral" />
               <Endpoint path="/api/atuadores" description="Saídas e ações" />
-              <Endpoint path="/api/geral" description="Payload completo" />
             </div>
           </section>
 
-          <section
-            id="documentacao"
-            className="scroll-mt-8 mt-8 rounded-[2rem] border border-cyan-400/10 bg-slate-950/70 p-7 backdrop-blur-xl"
-          >
+          <section id="documentacao" className="scroll-mt-8 mt-8 rounded-[2rem] border border-cyan-400/10 bg-slate-950/70 p-7 backdrop-blur-xl">
             <p className="text-sm uppercase tracking-[0.35em] text-cyan-300">
               Documentação
             </p>
-            <h2 className="mt-2 text-3xl font-black">
-              Arquitetura da Solução
-            </h2>
+            <h2 className="mt-2 text-3xl font-black">Arquitetura da Solução</h2>
 
             <div className="mt-6 grid gap-5 md:grid-cols-3">
-              <DocCard
-                title="Entradas"
-                description="DHT22, sensor de solo, LDR e botão físico para troca de telas no OLED."
-              />
-              <DocCard
-                title="Saídas"
-                description="LEDs de status, buzzer de alerta, luz artificial e servo para ventilação."
-              />
-              <DocCard
-                title="Comunicação"
-                description="ESP32 conectado via Wi-Fi, WebServer local e endpoints REST em JSON."
-              />
+              <DocCard title="Entradas" description="DHT22, sensor de solo, LDR e botão físico para interação com o sistema." />
+              <DocCard title="Saídas" description="LEDs de status, buzzer de alerta, luz artificial e servo motor para ventilação." />
+              <DocCard title="Comunicação" description="ESP32 conectado via Wi-Fi enviando dados para uma API REST em JSON consumida pelo dashboard." />
             </div>
           </section>
         </section>
@@ -539,15 +392,7 @@ export default function HomePage() {
   );
 }
 
-function TopBadge({
-  icon: Icon,
-  label,
-  value,
-}: {
-  icon: ElementType;
-  label: string;
-  value: string;
-}) {
+function TopBadge({ icon: Icon, label, value }: { icon: ElementType; label: string; value: string }) {
   return (
     <div className="flex items-center gap-3 rounded-2xl border border-cyan-400/10 bg-slate-900/70 px-4 py-3">
       <Icon size={18} className="text-cyan-300" />
@@ -559,15 +404,7 @@ function TopBadge({
   );
 }
 
-function Badge({
-  icon: Icon,
-  label,
-  value,
-}: {
-  icon: ElementType;
-  label: string;
-  value: string;
-}) {
+function Badge({ icon: Icon, label, value }: { icon: ElementType; label: string; value: string }) {
   return (
     <div className="rounded-2xl border border-cyan-400/10 bg-slate-950/70 p-4">
       <div className="flex items-center gap-3 text-cyan-300">
@@ -579,23 +416,7 @@ function Badge({
   );
 }
 
-function MetricCard({
-  icon: Icon,
-  title,
-  value,
-  subtitle,
-  percent,
-  color,
-  valueColor,
-}: {
-  icon: ElementType;
-  title: string;
-  value: string;
-  subtitle: string;
-  percent: number;
-  color: string;
-  valueColor: string;
-}) {
+function MetricCard({ icon: Icon, title, value, subtitle, percent, color, valueColor }: { icon: ElementType; title: string; value: string; subtitle: string; percent: number; color: string; valueColor: string }) {
   return (
     <div className="rounded-[2rem] border border-cyan-400/10 bg-slate-950/70 p-7 backdrop-blur-xl">
       <div className="flex items-center justify-between">
@@ -610,45 +431,16 @@ function MetricCard({
       <p className="mt-3 text-sm text-slate-500">{subtitle}</p>
 
       <div className="mt-7 h-2 rounded-full bg-slate-800">
-        <div
-          className={`h-2 rounded-full ${color}`}
-          style={{ width: `${percent}%` }}
-        />
+        <div className={`h-2 rounded-full ${color}`} style={{ width: `${percent}%` }} />
       </div>
     </div>
   );
 }
 
-function AlertCard({
-  title,
-  description,
-  danger = false,
-  success = false,
-}: {
-  title: string;
-  description: string;
-  danger?: boolean;
-  success?: boolean;
-}) {
+function AlertCard({ title, description, danger = false, success = false }: { title: string; description: string; danger?: boolean; success?: boolean }) {
   return (
-    <div
-      className={`rounded-2xl border p-5 ${
-        danger
-          ? "border-red-400/25 bg-red-500/10"
-          : success
-          ? "border-emerald-400/25 bg-emerald-500/10"
-          : "border-yellow-400/25 bg-yellow-500/10"
-      }`}
-    >
-      <p
-        className={`font-bold ${
-          danger
-            ? "text-red-300"
-            : success
-            ? "text-emerald-300"
-            : "text-yellow-300"
-        }`}
-      >
+    <div className={`rounded-2xl border p-5 ${danger ? "border-red-400/25 bg-red-500/10" : success ? "border-emerald-400/25 bg-emerald-500/10" : "border-yellow-400/25 bg-yellow-500/10"}`}>
+      <p className={`font-bold ${danger ? "text-red-300" : success ? "text-emerald-300" : "text-yellow-300"}`}>
         {title}
       </p>
       <p className="mt-2 text-sm leading-6 text-slate-400">{description}</p>
@@ -656,53 +448,21 @@ function AlertCard({
   );
 }
 
-function ActionCard({
-  icon: Icon,
-  title,
-  description,
-  active,
-  activeText,
-  inactiveText,
-  danger = false,
-}: {
-  icon: ElementType;
-  title: string;
-  description: string;
-  active: boolean;
-  activeText: string;
-  inactiveText: string;
-  danger?: boolean;
-}) {
+function ActionCard({ icon: Icon, title, description, active, activeText, inactiveText, danger = false }: { icon: ElementType; title: string; description: string; active: boolean; activeText: string; inactiveText: string; danger?: boolean }) {
   return (
     <div className="rounded-[2rem] border border-cyan-400/10 bg-slate-950/70 p-6 backdrop-blur-xl">
       <Icon className="text-cyan-300" size={28} />
       <p className="mt-5 text-xl font-bold">{title}</p>
-      <p className="mt-2 min-h-12 text-sm leading-6 text-slate-400">
-        {description}
-      </p>
+      <p className="mt-2 min-h-12 text-sm leading-6 text-slate-400">{description}</p>
 
-      <span
-        className={`mt-5 inline-block rounded-full px-4 py-2 text-sm font-semibold ${
-          active
-            ? danger
-              ? "bg-red-500/15 text-red-300"
-              : "bg-cyan-400/15 text-cyan-300"
-            : "bg-slate-800 text-slate-400"
-        }`}
-      >
+      <span className={`mt-5 inline-block rounded-full px-4 py-2 text-sm font-semibold ${active ? danger ? "bg-red-500/15 text-red-300" : "bg-cyan-400/15 text-cyan-300" : "bg-slate-800 text-slate-400"}`}>
         {active ? activeText : inactiveText}
       </span>
     </div>
   );
 }
 
-function Endpoint({
-  path,
-  description,
-}: {
-  path: string;
-  description: string;
-}) {
+function Endpoint({ path, description }: { path: string; description: string }) {
   return (
     <div className="rounded-2xl border border-slate-700 bg-slate-900/80 p-5">
       <p className="font-mono text-sm text-cyan-300">GET {path}</p>
@@ -711,13 +471,7 @@ function Endpoint({
   );
 }
 
-function DocCard({
-  title,
-  description,
-}: {
-  title: string;
-  description: string;
-}) {
+function DocCard({ title, description }: { title: string; description: string }) {
   return (
     <div className="rounded-2xl border border-cyan-400/10 bg-slate-900/70 p-5">
       <p className="font-bold text-cyan-300">{title}</p>
